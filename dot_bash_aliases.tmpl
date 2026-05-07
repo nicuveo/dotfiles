@@ -92,10 +92,15 @@ PROMPT_COMMAND='res=$?;PS1="\n$(__result $res)$(__time)$(__nested)$(__branch)$(_
 
 # ALIAS
 
+{{ if eq .chezmoi.os "linux" }}
+alias ls="ls --color=auto -h --group-directories-first"
+{{ else if eq .chezmoi.os "freebsd" }}
+alias ls="ls -Gh"
+{{ end }}
+
 alias e="emacs"
 alias h="head -n"
 alias t="tail -n"
-alias ls="ls --color=auto -h --group-directories-first"
 alias ll="ls -l"
 alias la="ls -lA"
 alias rm="rm -i"
