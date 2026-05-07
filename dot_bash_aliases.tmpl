@@ -74,19 +74,16 @@ function __path()
     echo "$rgb_lb\\w$rgb_00"
 }
 
-function __nested()
-{
-    if [ $SHLVL -gt 1 ]; then
-       echo "$rgb_ng[$SHLVL]$rgb_00 "
-    fi
-}
-
 function __prompt()
 {
-    echo "${rgb_nc}\\\$${rgb_00} "
+    echo -n "${rgb_nc}"
+    for i in $(seq $SHLVL); do
+        echo -n "\\\$"
+    done
+    echo "${rgb_00} "
 }
 
-PROMPT_COMMAND='res=$?;PS1="\n$(__result $res)$(__time)$(__nested)$(__branch)$(__userhost)$(__path)\n$(__prompt)"'
+PROMPT_COMMAND='res=$?;PS1="\n$(__result $res)$(__time)$(__branch)$(__userhost)$(__path)\n$(__prompt)"'
 
 
 
