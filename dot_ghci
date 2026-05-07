@@ -1,4 +1,4 @@
 :set +s +m
-:set prompt "\n\ESC[00;32m\STX[%N %V]\ESC[00;00m\STX \ESC[00;36m\STX%A\ESC[00;00m\STX \ESC[01;34m\STX%w\ESC[00;00m\STX\n%s\nλ "
+:set prompt "\n\ESC[00;32m\STX[%N %V]\ESC[00;00m\STX \ESC[00;36m\STX%A\ESC[00;00m\STX \ESC[01;34m\STX%w\ESC[00;00m\STX\n\ESC[00;36m\STXλ\ESC[00;00m\STX "
 :set editor emacs
 :seti -v0 -w -XOverloadedStrings -XOverloadedLists
