@@ -1,0 +1,54 @@
+[user]
+    name = Antoine Leblanc
+    email = {{ .email | quote }}
+
+[alias]
+    st = status
+    ci = commit
+    co = checkout
+    br = branch
+    ff = merge --ff-only
+    fa = fetch --all
+    rh = reset --hard
+    cp = cherry-pick
+    d = diff
+    pr = pull --rebase
+    sd = diff --staged
+    lg = log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)%an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+    lga = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)%an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+    pst = status --porcelain
+    modified = diff --name-only --diff-filter=M
+    conflict = diff --name-only --diff-filter=U
+    amend = commit --amend
+    shove = push --force-with-lease
+    yolo = push -f
+
+[init]
+    defaultBranch = main
+
+[core]
+    pager = delta
+
+[fetch]
+    prune = true
+
+[push]
+    default = simple
+
+[branch]
+    sort = -committerdate
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    line-numbers = true
+    hyperlinks = true
+    side-by-side = true
+
+[merge]
+    conflictStyle = zdiff3
+
+[color "branch"]
+    upstream = cyan

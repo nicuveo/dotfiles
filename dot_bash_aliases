@@ -148,6 +148,7 @@ function colors_test()
 
 __check_cmd git
 __check_cmd emacs
+__check_cmd delta
 __check_cmd autojump
 
 __source /usr/share/autojump/autojump.bash
