@@ -93,6 +93,8 @@ PROMPT_COMMAND='res=$?;PS1="\n$(__result $res)$(__time)$(__branch)$(__userhost)$
 alias ls="ls --color=auto -h --group-directories-first"
 {{ else if eq .chezmoi.os "freebsd" }}
 alias ls="ls -Gh"
+{{ else if eq .chezmoi.os "darwin" }}
+alias ls="ls -Gh"
 {{ end }}
 
 alias e="emacs"
