@@ -6,12 +6,19 @@ source "$(dirname "$0")/recovery/common.sh"
 
 function usage() {
     cat <<EOF
-Usage: make-recovery-drive /dev/partition
+Usage: make-backup-drive /dev/partition
 EOF
 }
 
 function rsync_data() {
-    cmd rsync --delete -avzL -e ssh --exclude "/lost+found" "data.nicuveo.fr:data/Recovery/*" "."
+    cmd rsync --delete -avzL -e ssh --exclude "/lost+found" "data.nicuveo.fr:data/*" "."
+}
+
+function estimate_data_size() {
+    # estimate data size by looking at the number of bytes used on the partition.
+    # between this and the 1.1 scaling factor, it means we slightly overestimate
+    # the actual size of a full backup
+    ssh -T data.nicuveo.fr "df data/ -B 1" | awk 'NR==2 {print int((1.1 * $3) / 1073741824) }'
 }
 
 
@@ -30,10 +37,12 @@ if [[ -n "$label" ]]; then
     echo "[INFO] partition label: $label"
 fi
 
+export -f estimate_data_size
+estimated_data_size=$(su "$SUDO_USER" -c 'estimate_data_size')
 partition_size=$(partition_get_size)
-if [ "$partition_size" -gt 30 ]; then
-    echo "[WARN] $partition is bigger than expected (${partition_size}GB)"
-    check_continue
+if [[ $partition_size -lt $estimated_data_size ]]; then
+    echo "[FATAL] $partition is not big enough to store backup: ${partition_size}GB < ${estimated_data_size}GB"
+    exit 3
 fi
 
 is_luks="$(partition_is_luks)"
@@ -60,7 +69,7 @@ partition_umount
 partition_close
 
 if [[ $is_luks == "y" ]]; then
-    echo "[INFO] recovery drive updated"
+    echo "[INFO] backup drive updated"
 else
-    echo "[INFO] recovery drive created"
+    echo "[INFO] backup drive created"
 fi

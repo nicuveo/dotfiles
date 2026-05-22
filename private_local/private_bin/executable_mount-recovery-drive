@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+source "$(dirname "$0")/recovery/common.sh"
+
+function usage() {
+    cat <<EOF
+Usage: mount-recovery-drive /dev/partition [folder=$HOME/Backup]
+EOF
+}
+
+
+if [ $# -lt 1 -o $# -gt 2 ]; then
+    usage
+    exit 1
+fi
+export partition="$1"
+export mountpoint="${2:-$HOME/Backup}"
+
+partition_check_exists
+run_as_root "$@"
+
+is_luks="$(partition_is_luks)"
+if [[ $is_luks == "n" ]]; then
+    echo "[FATAL] not a recovery drive"
+    exit 4
+fi
+
+partition_open
+partition_mount
+
+su "$SUDO_USER" -c "exo-open \"$mountpoint\""
